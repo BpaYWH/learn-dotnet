@@ -21,6 +21,12 @@ namespace ConsoleApp {
             this.isGameOver = false;
         }
 
+        private void clearLine() {
+                int currentlinecursor = Console.CursorTop;
+    Console.SetCursorPosition(0, Console.CursorTop);
+    Console.WriteLine(new string(' ', Console.WindowWidth)); 
+    Console.SetCursorPosition(0, currentlinecursor);
+        }
         public void play() {
             greeting();
             playerSetup(this.player1, this.player2);
@@ -31,6 +37,8 @@ namespace ConsoleApp {
                     gameover(player1);
                     break;
                 }
+
+                clearLine();
 
                 playTurn(this.player2);
                 if (isGameOver)
