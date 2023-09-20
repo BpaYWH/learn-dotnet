@@ -10,5 +10,7 @@ namespace FiveInARow.Services.FiveInARow
         ICollection<GameRecord> GetGameRecords();
 
         bool GameRecordExists(int id);
+
+        bool Save();
     }
 }

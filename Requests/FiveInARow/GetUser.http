@@ -1,3 +1,0 @@
-@id=482bf53e-21f9-45cc-a409-35dc1aafcfa6
-
-GET http://localhost:5095/users/{{id}}

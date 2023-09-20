@@ -15,8 +15,7 @@ namespace FiveInARow.Services.FiveInARow
         public bool CreateUser(User user)
         {
             _context.Users.Add(user);
-            _context.SaveChanges();
-            return true;
+            return Save();
         }
 
         public User GetUser(int id)
@@ -24,21 +23,26 @@ namespace FiveInARow.Services.FiveInARow
             return _context.Users.FirstOrDefault(u => u.Id == id);
         }
 
-        public bool UpsertUser(User user)
-        {
-            _context.Users.Update(user);
-            _context.SaveChanges();
-            return true;
-        }
-
         public ICollection<User> GetUsers()
         {
             return _context.Users.OrderBy(u => u.Id).ToList();
         }
 
+        public bool UpsertUser(User user)
+        {
+            _context.Users.Update(user);
+            return Save();
+        }
+
         public bool UserExists(int id)
         {
             return _context.Users.Any(u => u.Id == id);
+        }
+
+        public bool Save()
+        {
+            var saved = _context.SaveChanges();
+            return saved > 0;
         }
     }
 }

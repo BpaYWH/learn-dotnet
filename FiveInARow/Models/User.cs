@@ -17,7 +17,7 @@ namespace FiveInARow.Models
         [EmailAddress]
         public string Email { get; }
 
-        public DateTime CreatedAt { get; }
+        public DateTime CreatedAt { get; set; }
 
         public ICollection<UserGameRecord> UserGameRecords { get; }
 

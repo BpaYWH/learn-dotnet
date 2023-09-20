@@ -11,5 +11,7 @@ namespace FiveInARow.Services.FiveInARow
         bool UpsertUser(User user);
 
         bool UserExists(int id);
+
+        bool Save();
     }
 }
