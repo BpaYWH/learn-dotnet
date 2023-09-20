@@ -5,18 +5,21 @@ namespace FiveInARow.Models
     public class User
     {
         [Key]
-        public int Id { get; set; }
+        public int Id { get; }
         
         [Required]
-        public string Name { get; set; } = String.Empty;
+        public string Name { get; }
 
         [Required]
-        public string Password { get; set; } = String.Empty;
+        public string Password { get; }
 
         [Required]
         [EmailAddress]
-        public string Email { get; set;} = String.Empty;
+        public string Email { get; }
 
-        public ICollection<UserGameRecord>? UserGameRecords { get; set; }
+        public DateTime CreatedAt { get; }
+
+        public ICollection<UserGameRecord> UserGameRecords { get; }
+
     }
 }

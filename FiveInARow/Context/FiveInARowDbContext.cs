@@ -14,6 +14,7 @@ namespace FiveInARow.Context
         public DbSet<GameRecord> GameRecords { get; set; }
         public DbSet<UserGameRecord> UserGameRecords { get; set; }
 
+        // Customize models
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
             modelBuilder.Entity<UserGameRecord>()
@@ -26,6 +27,10 @@ namespace FiveInARow.Context
                 .HasOne(ugr => ugr.GameRecord)
                 .WithMany(gr => gr.UserGameRecords)
                 .HasForeignKey(ugr => ugr.GameRecordId);
+            modelBuilder.Entity<GameRecord>()
+                .HasKey(gr => gr.Id);
+            modelBuilder.Entity<User>()
+                .HasKey(u => u.Id);
         }
     }
 }

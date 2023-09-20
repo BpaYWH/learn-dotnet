@@ -109,7 +109,7 @@ PUT /users/{{id}}
 #### Create Game Record Request
 
 ```http
-POST /game-records
+POST /gamerecords
 ```
 
 ```json
@@ -129,7 +129,7 @@ POST /game-records
 ```
 
 ```yml
-Location: {{host}}/game-records/{{id}}
+Location: {{host}}/gamerecords/{{id}}
 ```
 
 ```json
@@ -148,7 +148,7 @@ Location: {{host}}/game-records/{{id}}
 #### Read Game Record Request
 
 ```http
-GET /game-records/{{id}}
+GET /gamerecords/{{id}}
 ```
 
 #### Read Game Record Response

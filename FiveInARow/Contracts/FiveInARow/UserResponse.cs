@@ -1,3 +1,4 @@
+using FiveInARow.Models;
 
 namespace FiveInARow.Contracts.FiveInARow
 {
@@ -6,7 +7,7 @@ namespace FiveInARow.Contracts.FiveInARow
         int Id,
         string Name,
         string Email,
-        ICollection<int> GameRecords
+        DateTime CreatedAt,
+        ICollection<GameRecord> GameRecords
     );
 }
-

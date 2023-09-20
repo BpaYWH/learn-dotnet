@@ -1,12 +1,14 @@
 
 namespace FiveInARow.Contracts.FiveInARow
 {
-    public record UpsertUserResponse
+    public record UpsertUserRequest
     (
         int Id,
         string Name,
         string Email,
-        ICollection<int> GameRecords
+        string Password,
+        DateTime CreatedAt,
+        List<int> GameRecords
     );
 }
 

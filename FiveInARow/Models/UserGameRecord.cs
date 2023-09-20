@@ -1,11 +1,18 @@
+using System.ComponentModel.DataAnnotations;
+
 namespace FiveInARow.Models
 {
     public class UserGameRecord
     {
-        public int UserId { get; set; }
-        public int GameRecordId { get; set; }
-        public User User { get; set;} = new ();
-        public GameRecord GameRecord { get; set;} = new ();
+        [Required]
+        public int UserId { get; }
+        [Required]
+        public int GameRecordId { get; }
+        [Required]
+        public User User { get; }
+        [Required]
+        public GameRecord GameRecord { get; }
+
     }
     
 }

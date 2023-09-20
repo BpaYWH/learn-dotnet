@@ -5,7 +5,10 @@ namespace FiveInARow.Contracts.FiveInARow
     (
         int Id,
         string Name,
-        string Email
+        string Email,
+        string Password,
+        DateTime CreatedAt,
+        List<int> GameRecords
     );
 }
 
