@@ -9,19 +9,20 @@ namespace FiveInARow.Models
         [BsonRepresentation(BsonType.ObjectId)]
         public string Id { get; }
 
-        [BsonElement("player1Id")]
-        public int Player1Id { get; }
+        [BsonId]
+        [BsonRepresentation(BsonType.ObjectId)]
+        public string GameId { get; }
 
-        [BsonElement("player2Id")]
-        public int Player2Id { get; }
+        [BsonElement("playerId")]
+        public string PlayerId { get; }
 
-        [BsonElement("moves")]
-        public List<Move> Moves { get; set; }
-    }
+        [BsonElement("row")]
+        public int Row { get; set; }
 
-    public class Move
-    {
-        public Tuple<int, int, DateTime> MoveData { get; set; }
-
+        [BsonElement("col")]
+        public int Col { get; set; }
+        
+        [BsonElement("timestamp")]
+        public DateTime Timestamp { get; set; }
     }
 }

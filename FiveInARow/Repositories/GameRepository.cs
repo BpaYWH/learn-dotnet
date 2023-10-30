@@ -28,7 +28,7 @@ namespace FiveInARow.Repositories
             throw new NotImplementedException();
         }
 
-        public bool UpsertGameMoveCache(Move move)
+        public bool UpsertGameMoveCache()
         {
             // var moveLength = _gameMove.Moves.Count;
             // _gameMove.Moves.Add(move);

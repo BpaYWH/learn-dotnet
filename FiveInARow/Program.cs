@@ -29,6 +29,11 @@ var builder = WebApplication.CreateBuilder(args);
     {
         options.UseNpgsql(builder.Configuration.GetConnectionString("GomokuDb"));
     });
+    builder.Services.AddStackExchangeRedisCache(options => 
+    {
+        options.Configuration = builder.Configuration.GetConnectionString("Redis");
+        options.InstanceName = "FiveInARow_Base";
+    });
 
     // Add services to the container.
     builder.Services.AddEndpointsApiExplorer();

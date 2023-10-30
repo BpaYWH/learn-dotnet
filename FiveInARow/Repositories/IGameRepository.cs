@@ -8,7 +8,7 @@ namespace FiveInARow.Repositories
 
         GameMove GetGameMove();
 
-        bool UpsertGameMoveCache(Move move);
+        bool UpsertGameMoveCache();
 
         bool Save();
     }
