@@ -12,6 +12,7 @@ namespace FiveInARow.Helper
             CreateMap<UserDto, User>();
             CreateMap<GameRecord, GameRecordDto>();
             CreateMap<GameRecordDto, GameRecord>();
+            CreateMap<GameMoveDto, GameMove>();
         }
     }
 }
