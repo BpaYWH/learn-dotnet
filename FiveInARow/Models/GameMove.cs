@@ -11,10 +11,10 @@ namespace FiveInARow.Models
 
         [BsonId]
         [BsonRepresentation(BsonType.ObjectId)]
-        public string GameId { get; }
+        public string GameId { get; set; }
 
         [BsonElement("playerId")]
-        public string PlayerId { get; }
+        public string PlayerId { get; set; }
 
         [BsonElement("row")]
         public int Row { get; set; }

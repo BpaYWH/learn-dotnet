@@ -120,6 +120,7 @@ namespace FiveInARow.Hubs
             // handle game set
             if (gameState != null && gameState.IsFinished)
             {
+                await Clients.Group(roomId).SendAsync("GameSet");
                 _gameRepository.EndGame(roomId);
                 _gameRepository.ClearRoom(roomId);
             }

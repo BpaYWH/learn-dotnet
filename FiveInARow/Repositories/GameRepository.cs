@@ -93,11 +93,9 @@ namespace FiveInARow.Repositories
 
         public bool ValidateMove(string roomId, GameMove move)
         {
-            Console.WriteLine(move.Row + "," + move.Col + " by " + move.PlayerId);
             gameStates.TryGetValue(roomId, out var gameState);
             if (gameState == null) 
             {
-                Console.WriteLine("game not found");
                 return false;
             }
 
@@ -106,12 +104,10 @@ namespace FiveInARow.Repositories
 
             if (move.Row < 0 || move.Row >= board.GetLength(0) || move.Col < 0 || move.Col >= board.GetLength(1)) 
             {
-                Console.WriteLine("out of board");
                 return false;
             }
             if (board[move.Row, move.Col] != 0 || currentPlayerId != move.PlayerId) 
             {
-                Console.WriteLine("occupied");
                 return false;
             }
 
@@ -169,11 +165,17 @@ namespace FiveInARow.Repositories
             var currentPlayerId = gameState.CurrentPlayerId;
 
             gameState.Board[move.Row, move.Col] = currentPlayerId == gameState.Player1Id ? 1 : 2;
-            gameState.CurrentPlayerId = currentPlayerId == gameState.Player1Id ? gameState.Player2Id : gameState.Player1Id;
             gameState.Moves.Add(move);
 
             // check win
             gameState.IsFinished = IsGameSet(gameState.Board, currentPlayerId == gameState.Player1Id ? 1 : 2);
+            if (gameState.IsFinished) {
+                gameState.WinnerId = currentPlayerId;
+                return;
+            }
+
+            // update current player
+            gameState.CurrentPlayerId = currentPlayerId == gameState.Player1Id ? gameState.Player2Id : gameState.Player1Id;
 
             return;
         }
