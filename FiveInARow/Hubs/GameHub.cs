@@ -50,7 +50,7 @@ namespace FiveInARow.Hubs
                 await Groups.AddToGroupAsync(Context.ConnectionId, roomId);
                 await Clients.Caller.SendAsync("RoomJoined", roomId, Context.ConnectionId);
                 await Clients.Group(roomId).SendAsync("Announcement", Context.ConnectionId + " joined!");
-                await Clients.Group(roomId).SendAsync("PlayerJoined", _gameRepository.IsRoomFull(roomId));
+                await Clients.Group(roomId).SendAsync("PlayerConnected", _gameRepository.IsRoomFull(roomId));
             }
             else
             {
@@ -99,9 +99,14 @@ namespace FiveInARow.Hubs
         public async Task Move(string roomId, GameMoveDto gameMove)
         {
             // check valid player
-            if (!_gameRepository.IsPlayerInRoom(roomId, Context.ConnectionId) || !_gameRepository.IsInGame(roomId))
+            if (!_gameRepository.IsPlayerInRoom(roomId, Context.ConnectionId))
             {
-                await Clients.Caller.SendAsync("InvalidGame", "Invalid game");
+                await Clients.Caller.SendAsync("Announcement", "Invalid game");
+                return;
+            }
+            if (!_gameRepository.IsInGame(roomId))
+            {
+                await Clients.Caller.SendAsync("Announcement", "Game not started");
                 return;
             }
 
@@ -109,7 +114,7 @@ namespace FiveInARow.Hubs
             GameMove gameMoveMap = _mapper.Map<GameMove>(gameMove);
             if (!_gameRepository.ValidateMove(roomId, gameMoveMap))
             {
-                await Clients.Caller.SendAsync("InvalidMove", "Invalid move");
+                await Clients.Caller.SendAsync("Announcement", "Invalid move");
                 return;
             }
 
@@ -126,13 +131,8 @@ namespace FiveInARow.Hubs
             {
                 await Clients.Group(roomId).SendAsync("GameSet");
                 _gameRepository.EndGame(roomId);
-                _gameRepository.ClearRoom(roomId);
+                // _gameRepository.ClearRoom(roomId);
             }
         }
-
-        public async Task Msg(string roomId, string msg) {
-            await Clients.Group(roomId).SendAsync("Msg", msg);
-        }
-        // Announcement
     }
 }
