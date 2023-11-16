@@ -190,15 +190,14 @@ namespace FiveInARow.Repositories
             gameStates.TryRemove(roomId, out var _);
         }
 
-        public async void ClearRoom(string roomId)
+        public void ClearRoom(string roomId)
         {
             gameRooms.TryGetValue(roomId, out var players);
             if (players == null) return;
 
-            // foreach (string playerId in players) {
-            //     await Clients.Groups(roomId).SendAsync("RoomLeft", playerId);
-            //     await Groups.RemoveFromGroupAsync(playerId, roomId);
-            // }
+            foreach (string playerId in players) {
+                gameRooms[roomId].Remove(playerId);
+            }
 
             gameRooms.TryRemove(roomId, out var _);
         }
@@ -213,6 +212,10 @@ namespace FiveInARow.Repositories
         {
             gameStates.TryGetValue(roomId, out var gameState);
             return gameState != null && !gameState.IsFinished;
+        }
+
+        public bool IsHost(string playerId, string roomId) {
+            return playerId == roomId;
         }
     }
 }

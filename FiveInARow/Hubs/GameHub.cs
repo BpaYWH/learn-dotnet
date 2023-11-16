@@ -33,11 +33,11 @@ namespace FiveInARow.Hubs
                 // If the provided roomId doesn't exist, generate a new one
                 _gameRepository.AddRoom(roomId);
                 await Groups.AddToGroupAsync(Context.ConnectionId, roomId);
-                await Clients.Caller.SendAsync("RoomCreated", roomId, roomId);
+                await Clients.Caller.SendAsync("RoomCreated", roomId, Context.ConnectionId);
             } 
             else 
             {
-                await Clients.Caller.SendAsync("RoomNotCreated");
+                await Clients.Caller.SendAsync("Annoucement", "Room not created");
                 Context.Abort();
             }
         }
@@ -49,11 +49,12 @@ namespace FiveInARow.Hubs
                 _gameRepository.JoinRoom(roomId, Context.ConnectionId);
                 await Groups.AddToGroupAsync(Context.ConnectionId, roomId);
                 await Clients.Caller.SendAsync("RoomJoined", roomId, Context.ConnectionId);
-                await Clients.Group(roomId).SendAsync("PlayerConnected", Context.ConnectionId, _gameRepository.IsRoomFull(roomId));
+                await Clients.Group(roomId).SendAsync("Announcement", Context.ConnectionId + " joined!");
+                await Clients.Group(roomId).SendAsync("PlayerJoined", _gameRepository.IsRoomFull(roomId));
             }
             else
             {
-                await Clients.Caller.SendAsync("RoomNotFound");
+                await Clients.Caller.SendAsync("Announcement", "Room not found");
                 Context.Abort();
             }
         }
@@ -75,20 +76,23 @@ namespace FiveInARow.Hubs
 
         public async Task LeaveGame(string roomId) 
         {
-            if (_gameRepository.RoomExists(roomId))
-            {
-                if (_gameRepository.IsPlayerInRoom(roomId, Context.ConnectionId) && _gameRepository.IsInGame(roomId))
-                {
-                    _gameRepository.EndGame(roomId);
-                    _gameRepository.ClearRoom(roomId);
-                }
-                else
-                {
-                    _gameRepository.LeaveRoom(roomId, Context.ConnectionId);
-                    await Clients.Group(roomId).SendAsync("RoomLeft", Context.ConnectionId);
-                }
-            }
+            if (!_gameRepository.RoomExists(roomId) || !_gameRepository.IsPlayerInRoom(roomId, Context.ConnectionId)) Context.Abort();
+            if (_gameRepository.IsInGame(roomId)) return;
 
+            if (_gameRepository.IsHost(Context.ConnectionId, roomId))
+            {
+                _gameRepository.ClearRoom(roomId);
+                // disconnect all players from client side
+                await Clients.Group(roomId).SendAsync("RoomClosed");
+            }
+            else
+            {
+                _gameRepository.LeaveRoom(roomId, Context.ConnectionId);
+                await Clients.Caller.SendAsync("RoomLeft", Context.ConnectionId);
+                await Groups.RemoveFromGroupAsync(Context.ConnectionId, roomId);
+                await Clients.Group(roomId).SendAsync("PlayerDisconnected", _gameRepository.IsRoomFull(roomId));
+                await Clients.Group(roomId).SendAsync("Announcement", Context.ConnectionId + " disconnected");
+            }
             Context.Abort();
         }
 
@@ -126,6 +130,9 @@ namespace FiveInARow.Hubs
             }
         }
 
+        public async Task Msg(string roomId, string msg) {
+            await Clients.Group(roomId).SendAsync("Msg", msg);
+        }
         // Announcement
     }
 }

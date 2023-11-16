@@ -39,5 +39,7 @@ namespace FiveInARow.Repositories
         bool IsPlayerInRoom(string roomId, string playerId);
 
         bool IsInGame(string roomId);
+
+        bool IsHost(string playerId, string roomId);
     }
 }
